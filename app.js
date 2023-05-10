@@ -42,15 +42,16 @@ app.post("/login/", async (request, response) => {
   if (dbUser === undefined) {
     response.status(400);
     response.send("Invalid user");
-  }
-  const isPasswordMatched = await bcrypt.compare(password, dbUser.password);
-  if (isPasswordMatched === false) {
-    response.status(400);
-    response.send("Invalid password");
   } else {
-    const payload = { username: username };
-    const jwtToken = jwt.sign(payload, "MY_SECRET_TOKEN");
-    response.send({ jwtToken });
+    const isPasswordMatched = await bcrypt.compare(password, dbUser.password);
+    if (isPasswordMatched === false) {
+      response.status(400);
+      response.send("Invalid password");
+    } else {
+      const payload = { username: username };
+      const jwtToken = jwt.sign(payload, "MY_SECRET_TOKEN");
+      response.send({ jwtToken });
+    }
   }
 });
 
